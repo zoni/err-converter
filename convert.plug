@@ -1,0 +1,9 @@
+[Core]
+Name = Converter
+Module = convert
+
+[Python]
+Version = 2+
+
+[Documentation]
+Description = Convert various measurements and metrics

@@ -1,0 +1,12 @@
+language: python
+
+python:
+  - "2.7"
+  - "3.3"
+  - "3.4"
+
+install:
+  # Necessary for now because of experimental features
+  - pip install https://github.com/zoni/err/archive/pytest.zip
+
+script: py.test
