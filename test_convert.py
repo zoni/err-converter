@@ -36,3 +36,35 @@ class TestTemperatureConversions(object):
         assert pop_message() == u"98.6 °F equals 37 °C"
         push_message('!ftoc abc')
         assert pop_message() == u"'abc' is not a temperature I understand."
+
+    def test_regex_triggers(self, testbot):
+        say_expect = [
+            ("It's 30 degrees C", u"30 °C equals 86 °F"),
+            ("It's 30 degrees Celsius", u"30 °C equals 86 °F"),
+            ("It's 30 degrees C today", u"30 °C equals 86 °F"),
+            ("It's 30 degrees c today", u"30 °C equals 86 °F"),
+            ("It's 30 degrees Celsius today", u"30 °C equals 86 °F"),
+            ("It's 30 degrees celsius today", u"30 °C equals 86 °F"),
+            ("It's 30 degrees c.", u"30 °C equals 86 °F"),
+            ("It's 30 degrees celsius.", u"30 °C equals 86 °F"),
+            ("It's 30 celsius today", u"30 °C equals 86 °F"),
+            ("It's 86 degrees Fahrenheit today", u"86 °F equals 30 °C"),
+            ("It's -40 degrees Celsius today", u"-40 °C equals -40 °F"),
+            ("30 degrees Celsius", u"30 °C equals 86 °F"),
+            ("What's 37 degrees celsius in fahrenheit?", u"37 °C equals 98.6 °F"),
+            ("What's 98.6 degrees fahrenheit in celsius?", u"98.6 °F equals 37 °C"),
+        ]
+
+        for item in say_expect:
+            push_message(item[0])
+            assert pop_message() == item[1]
+
+        push_message("It's 30 c today")
+        push_message("It's 30 f today")
+        push_message("It's 30 degrees celvin (I know Kelvin should be with a K)")
+
+        # None of the above should match so response to this should be
+        # first item returned by pop_message().
+        push_message("!echo trick-to-avoid-wait-for-empty-queue")
+        assert pop_message() == "trick-to-avoid-wait-for-empty-queue"
+

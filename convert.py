@@ -1,6 +1,17 @@
 # encoding: utf-8
-from errbot import BotPlugin, botcmd
+import re
+from errbot import BotPlugin, botcmd, re_botcmd
 
+TEMPERATURE_REGEX = re.compile(
+    r"""(?P<degrees>[-+]?[\d]*\.?[\d]+)\s+  # Digit with optional precision followed by whitespace
+        (
+            ((degrees )?(?P<type1>(Celsius|Fahrenheit)))  # Word 'degrees' optional
+        |
+            (degrees\ (?P<type2>(Celsius|Fahrenheit|C|F)))  # 'degrees' required when just C/F
+        )
+        ([^\w]+|$)  # after c/f should come non-word character or end of line.""",
+    flags=re.IGNORECASE|re.VERBOSE
+)
 
 def is_number(s):
     """Return true if the given string is a number"""
@@ -44,3 +55,13 @@ class Converter(BotPlugin):
             return u"{f:1g} °F equals {c:1g} °C".format(f=f, c=c)
         else:
             return "'{}' is not a temperature I understand.".format(args)
+
+    @re_botcmd(pattern=TEMPERATURE_REGEX, prefixed=False)
+    def listen_for_temperature_mentions(self, msg, match):
+        gd = match.groupdict()
+        type_ = gd['type1'] if gd['type1'] is not None else gd['type2']
+
+        if type_.lower() in ("c", "celsius"):
+            return self.ctof(msg, gd['degrees'])
+        else:
+            return self.ftoc(msg, gd['degrees'])
