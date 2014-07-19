@@ -6,7 +6,11 @@ python:
   - "3.4"
 
 install:
+  - pip install pytest pytest-cov python-coveralls
   # Necessary for now because of experimental features
   - pip install https://github.com/zoni/err/archive/pytest.zip
 
-script: py.test
+script: py.test --cov convert
+
+after_success:
+  - coveralls
