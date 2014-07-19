@@ -31,7 +31,7 @@ class Converter(BotPlugin):
         if is_number(args):
             c = float(args)
             f = self.celsius_to_fahrenheit(c)
-            return "{c:1g} °C equals {f:1g} °F".format(c=c, f=f)
+            return u"{c:1g} °C equals {f:1g} °F".format(c=c, f=f)
         else:
             return "'{}' is not a temperature I understand.".format(args)
 
@@ -41,6 +41,6 @@ class Converter(BotPlugin):
         if is_number(args):
             f = float(args)
             c = self.fahrenheit_to_celsius(f)
-            return "{f:1g} °F equals {c:1g} °C".format(f=f, c=c)
+            return u"{f:1g} °F equals {c:1g} °C".format(f=f, c=c)
         else:
             return "'{}' is not a temperature I understand.".format(args)

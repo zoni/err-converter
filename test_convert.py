@@ -23,16 +23,16 @@ class TestTemperatureConversions(object):
 
     def test_ctof(self, testbot):
         push_message("!ctof 100")
-        assert pop_message() == "100 °C equals 212 °F"
+        assert pop_message() == u"100 °C equals 212 °F"
         push_message("!ctof 37")
-        assert pop_message() == "37 °C equals 98.6 °F"
+        assert pop_message() == u"37 °C equals 98.6 °F"
         push_message('!ctof abc')
-        assert pop_message() == "'abc' is not a temperature I understand."
+        assert pop_message() == u"'abc' is not a temperature I understand."
 
     def test_ftoc(self, testbot):
         push_message("!ftoc 212")
-        assert pop_message() == "212 °F equals 100 °C"
+        assert pop_message() == u"212 °F equals 100 °C"
         push_message("!ftoc 98.6")
-        assert pop_message() == "98.6 °F equals 37 °C"
+        assert pop_message() == u"98.6 °F equals 37 °C"
         push_message('!ftoc abc')
-        assert pop_message() == "'abc' is not a temperature I understand."
+        assert pop_message() == u"'abc' is not a temperature I understand."
