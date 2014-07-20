@@ -13,6 +13,7 @@ TEMPERATURE_REGEX = re.compile(
     flags=re.IGNORECASE|re.VERBOSE
 )
 
+
 def is_number(s):
     """Return true if the given string is a number"""
     try:

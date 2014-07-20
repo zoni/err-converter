@@ -67,4 +67,3 @@ class TestTemperatureConversions(object):
         # first item returned by pop_message().
         push_message("!echo trick-to-avoid-wait-for-empty-queue")
         assert pop_message() == "trick-to-avoid-wait-for-empty-queue"
-
