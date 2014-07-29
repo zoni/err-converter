@@ -38,7 +38,7 @@ class Converter(BotPlugin):
         return (fahrenheit - 32.0) / 1.8
 
     @botcmd
-    def ctof(self, msg, args):
+    def c2f(self, msg, args):
         """Convert given degrees Celsius to Fahrenheit"""
         if is_number(args):
             c = float(args)
@@ -48,7 +48,7 @@ class Converter(BotPlugin):
             return "'{}' is not a temperature I understand.".format(args)
 
     @botcmd
-    def ftoc(self, msg, args):
+    def f2c(self, msg, args):
         """Convert given degrees Fahrenheit to Celsius"""
         if is_number(args):
             f = float(args)
@@ -63,6 +63,6 @@ class Converter(BotPlugin):
         type_ = gd['type1'] if gd['type1'] is not None else gd['type2']
 
         if type_.lower() in ("c", "celsius"):
-            return self.ctof(msg, gd['degrees'])
+            return self.c2f(msg, gd['degrees'])
         else:
-            return self.ftoc(msg, gd['degrees'])
+            return self.f2c(msg, gd['degrees'])

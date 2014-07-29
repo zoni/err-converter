@@ -22,19 +22,19 @@ class TestTemperatureConversions(object):
         assert abs(f_to_c(98.6) - 37) < 0.00001
 
     def test_ctof(self, testbot):
-        push_message("!ctof 100")
+        push_message("!c2f 100")
         assert pop_message() == u"100 °C equals 212 °F"
-        push_message("!ctof 37")
+        push_message("!c2f 37")
         assert pop_message() == u"37 °C equals 98.6 °F"
-        push_message('!ctof abc')
+        push_message('!c2f abc')
         assert pop_message() == u"'abc' is not a temperature I understand."
 
     def test_ftoc(self, testbot):
-        push_message("!ftoc 212")
+        push_message("!f2c 212")
         assert pop_message() == u"212 °F equals 100 °C"
-        push_message("!ftoc 98.6")
+        push_message("!f2c 98.6")
         assert pop_message() == u"98.6 °F equals 37 °C"
-        push_message('!ftoc abc')
+        push_message('!f2c abc')
         assert pop_message() == u"'abc' is not a temperature I understand."
 
     def test_regex_triggers(self, testbot):
