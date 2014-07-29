@@ -6,8 +6,7 @@ python:
   - "3.4"
 
 install:
-  - pip install pytest pytest-cov python-coveralls pep8
-  - pip install https://github.com/gbin/err/archive/master.zip
+  - pip install err pytest pytest-cov python-coveralls pep8
 
 script:
   - py.test --cov convert
