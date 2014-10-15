@@ -1,5 +1,6 @@
 # encoding: utf-8
 import re
+import pint
 from errbot import BotPlugin, botcmd, re_botcmd
 
 TEMPERATURE_REGEX = re.compile(
@@ -14,48 +15,60 @@ TEMPERATURE_REGEX = re.compile(
 )
 
 
-def is_number(s):
-    """Return true if the given string is a number"""
-    try:
-        float(s)
-    except ValueError:
-        return False
-    else:
-        return True
-
-
 class Converter(BotPlugin):
     """Convert various measurements and metrics"""
 
-    @staticmethod
-    def celsius_to_fahrenheit(celsius):
-        """Convert Celsius to Fahrenheit"""
-        return celsius * 1.8 + 32.0
+    def __init__(self):
+        super(Converter, self).__init__()
+        self.unitregistry = pint.UnitRegistry()
 
-    @staticmethod
-    def fahrenheit_to_celsius(fahrenheit):
-        """Convert Fahrenheit to Celsius"""
-        return (fahrenheit - 32.0) / 1.8
+    def _convert(self, quantity, from_, to):
+        """
+        Convert quantity from one thing to another
 
-    @botcmd
-    def c2f(self, msg, args):
-        """Convert given degrees Celsius to Fahrenheit"""
-        if is_number(args):
-            c = float(args)
-            f = self.celsius_to_fahrenheit(c)
-            return u"{c:1g} °C equals {f:1g} °F".format(c=c, f=f)
+        :param quantity:
+            The quantity to convert
+        :param from_:
+            The type of metric to convert from
+        :param to:
+            The type of metric to convert to
+        :return:
+            A tuple in the form (from, to) where from is the quantity
+            in the from_ form, to is the quantity in the to form.
+        """
+        from_ = float(quantity) * getattr(self.unitregistry, from_)
+        to = from_.to(getattr(self.unitregistry, to))
+        return (from_, to)
+
+    @botcmd(split_args_with=None)
+    def convert(self, msg, args):
+        """
+        Convert a given measurement into something else.
+
+        Usage:
+            !convert <amount> <from> <to>
+        or:
+            !convert <amount> <from> to <to>
+
+        Examples:
+            !convert 30 celsius fahrenheit
+            !convert 30 celsius to fahrenheit
+            !convert 10 meters yards
+            !convert 10 meters to yards
+        """
+        l = len(args)
+        if l == 3:
+            amount, from_, to = args
+        elif l == 4:
+            amount, from_, to = (args[0], args[1], args[3])
         else:
-            return "'{}' is not a temperature I understand.".format(args)
+            return "Usage: !convert <amount> <from> to <to>"
 
-    @botcmd
-    def f2c(self, msg, args):
-        """Convert given degrees Fahrenheit to Celsius"""
-        if is_number(args):
-            f = float(args)
-            c = self.fahrenheit_to_celsius(f)
-            return u"{f:1g} °F equals {c:1g} °C".format(f=f, c=c)
-        else:
-            return "'{}' is not a temperature I understand.".format(args)
+        try:
+            from_, to = self._convert(amount, from_, to)
+            return "{:1g} = {:1g}".format(from_, to)
+        except Exception as e:
+            return "I don't know how to convert that ({}).".format(e)
 
     @re_botcmd(pattern=TEMPERATURE_REGEX, prefixed=False)
     def listen_for_temperature_mentions(self, msg, match):
@@ -63,6 +76,6 @@ class Converter(BotPlugin):
         type_ = gd['type1'] if gd['type1'] is not None else gd['type2']
 
         if type_.lower() in ("c", "celsius"):
-            return self.c2f(msg, gd['degrees'])
+            return self.convert(msg, (gd['degrees'], 'celsius', 'fahrenheit'))
         else:
-            return self.f2c(msg, gd['degrees'])
+            return self.convert(msg, (gd['degrees'], 'fahrenheit', 'celsius'))

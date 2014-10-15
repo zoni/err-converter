@@ -7,52 +7,33 @@ extra_plugin_dir = dirname(abspath(__name__))
 
 
 class TestTemperatureConversions(object):
-    def test_celsius_to_fahrenheit(self):
-        c_to_f = Converter.celsius_to_fahrenheit
-        assert c_to_f(100) == 212
-        assert c_to_f(0) == 32
-        assert c_to_f(-40) == -40
-        assert abs(c_to_f(37) - 98.6) < 0.00001
+    def test_convert_botcmd(self, testbot):
+        push_message("!convert 1 kilometer to meters")
+        assert pop_message() == "1 kilometer = 1000 meter"
+        push_message("!convert 1 kilometer to yards")
+        assert pop_message() == "1 kilometer = 1093.61 yard"
 
-    def test_fahrenheit_to_celsius(self):
-        f_to_c = Converter.fahrenheit_to_celsius
-        assert f_to_c(212) == 100
-        assert f_to_c(32) == 0
-        assert f_to_c(-40) == -40
-        assert abs(f_to_c(98.6) - 37) < 0.00001
+        push_message("!convert a kilometer to yards")
+        assert pop_message() == "I don't know how to convert that (could not convert string to float: 'a')."
+        push_message("!convert 1 foo to bar")
+        assert pop_message() == "I don't know how to convert that ('foo' is not defined in the unit registry)."
 
-    def test_ctof(self, testbot):
-        push_message("!c2f 100")
-        assert pop_message() == u"100 °C equals 212 °F"
-        push_message("!c2f 37")
-        assert pop_message() == u"37 °C equals 98.6 °F"
-        push_message('!c2f abc')
-        assert pop_message() == u"'abc' is not a temperature I understand."
-
-    def test_ftoc(self, testbot):
-        push_message("!f2c 212")
-        assert pop_message() == u"212 °F equals 100 °C"
-        push_message("!f2c 98.6")
-        assert pop_message() == u"98.6 °F equals 37 °C"
-        push_message('!f2c abc')
-        assert pop_message() == u"'abc' is not a temperature I understand."
-
-    def test_regex_triggers(self, testbot):
+    def test_temperature_regex(self, testbot):
         say_expect = [
-            ("It's 30 degrees C", u"30 °C equals 86 °F"),
-            ("It's 30 degrees Celsius", u"30 °C equals 86 °F"),
-            ("It's 30 degrees C today", u"30 °C equals 86 °F"),
-            ("It's 30 degrees c today", u"30 °C equals 86 °F"),
-            ("It's 30 degrees Celsius today", u"30 °C equals 86 °F"),
-            ("It's 30 degrees celsius today", u"30 °C equals 86 °F"),
-            ("It's 30 degrees c.", u"30 °C equals 86 °F"),
-            ("It's 30 degrees celsius.", u"30 °C equals 86 °F"),
-            ("It's 30 celsius today", u"30 °C equals 86 °F"),
-            ("It's 86 degrees Fahrenheit today", u"86 °F equals 30 °C"),
-            ("It's -40 degrees Celsius today", u"-40 °C equals -40 °F"),
-            ("30 degrees Celsius", u"30 °C equals 86 °F"),
-            ("What's 37 degrees celsius in fahrenheit?", u"37 °C equals 98.6 °F"),
-            ("What's 98.6 degrees fahrenheit in celsius?", u"98.6 °F equals 37 °C"),
+            ("It's 30 degrees C", u"30 degC = 86 degF"),
+            ("It's 30 degrees Celsius", u"30 degC = 86 degF"),
+            ("It's 30 degrees C today", u"30 degC = 86 degF"),
+            ("It's 30 degrees c today", u"30 degC = 86 degF"),
+            ("It's 30 degrees Celsius today", u"30 degC = 86 degF"),
+            ("It's 30 degrees celsius today", u"30 degC = 86 degF"),
+            ("It's 30 degrees c.", u"30 degC = 86 degF"),
+            ("It's 30 degrees celsius.", u"30 degC = 86 degF"),
+            ("It's 30 celsius today", u"30 degC = 86 degF"),
+            ("It's 86 degrees Fahrenheit today", u"86 degF = 30 degC"),
+            ("It's -40 degrees Celsius today", u"-40 degC = -40 degF"),
+            ("30 degrees Celsius", u"30 degC = 86 degF"),
+            ("What's 37 degrees celsius in fahrenheit?", u"37 degC = 98.6 degF"),
+            ("What's 98.6 degrees fahrenheit in celsius?", u"98.6 degF = 37 degC"),
         ]
 
         for item in say_expect:
