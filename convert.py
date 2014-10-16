@@ -17,6 +17,7 @@ TEMPERATURE_REGEX = re.compile(
 
 class Converter(BotPlugin):
     """Convert various measurements and metrics"""
+    min_err_version = '2.1.0'
 
     def __init__(self):
         super(Converter, self).__init__()
