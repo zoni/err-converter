@@ -6,7 +6,7 @@ python:
   - "3.4"
 
 install:
-  - pip install err pytest pytest-cov python-coveralls pep8
+  - pip install err pytest pytest-cov python-coveralls pep8 --requirement requirements.txt
 
 script:
   - py.test --cov convert
