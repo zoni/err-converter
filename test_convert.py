@@ -14,7 +14,11 @@ class TestTemperatureConversions(object):
         assert pop_message() == "1 kilometer = 1093.61 yard"
 
         push_message("!convert a kilometer to yards")
-        assert pop_message() == "I don't know how to convert that (could not convert string to float: 'a')."
+        m = pop_message()
+        assert (
+            m == "I don't know how to convert that (could not convert string to float: 'a')."
+            or m == "I don't know how to convert that (could not convert string to float: a)."
+        )
         push_message("!convert 1 foo to bar")
         assert pop_message() == "I don't know how to convert that ('foo' is not defined in the unit registry)."
 
