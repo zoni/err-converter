@@ -21,7 +21,7 @@ class Converter(BotPlugin):
 
     def __init__(self):
         super(Converter, self).__init__()
-        self.unitregistry = pint.UnitRegistry()
+        self.unitregistry = pint.UnitRegistry(autoconvert_offset_to_baseunit=True)
 
     def _convert(self, quantity, from_, to):
         """
