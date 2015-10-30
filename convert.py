@@ -23,7 +23,7 @@ class Converter(BotPlugin):
         super(Converter, self).__init__()
         self.unitregistry = pint.UnitRegistry(autoconvert_offset_to_baseunit=True)
 
-    def _convert(self, quantity, from_, to):
+    def convert(self, quantity, from_, to):
         """
         Convert quantity from one thing to another
 
@@ -41,8 +41,8 @@ class Converter(BotPlugin):
         to = from_.to(getattr(self.unitregistry, to))
         return (from_, to)
 
-    @botcmd(split_args_with=None)
-    def convert(self, msg, args):
+    @botcmd(name="convert", split_args_with=None)
+    def convert_cmd(self, msg, args):
         """
         Convert a given measurement into something else.
 
@@ -60,13 +60,13 @@ class Converter(BotPlugin):
         l = len(args)
         if l == 3:
             amount, from_, to = args
-        elif l == 4:
+        elif l == 4 and args[2] == "to":
             amount, from_, to = (args[0], args[1], args[3])
         else:
             return "Usage: !convert <amount> <from> to <to>"
 
         try:
-            from_, to = self._convert(amount, from_, to)
+            from_, to = self.convert(amount, from_, to)
             return "{:1g} = {:1g}".format(from_, to)
         except Exception as e:
             return "I don't know how to convert that ({}).".format(e)
@@ -77,6 +77,6 @@ class Converter(BotPlugin):
         type_ = gd['type1'] if gd['type1'] is not None else gd['type2']
 
         if type_.lower() in ("c", "celsius"):
-            return self.convert(msg, (gd['degrees'], 'celsius', 'fahrenheit'))
+            return self.convert_cmd(msg, (gd['degrees'], 'celsius', 'fahrenheit'))
         else:
-            return self.convert(msg, (gd['degrees'], 'fahrenheit', 'celsius'))
+            return self.convert_cmd(msg, (gd['degrees'], 'fahrenheit', 'celsius'))
