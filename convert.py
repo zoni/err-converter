@@ -1,4 +1,5 @@
 # encoding: utf-8
+from __future__ import unicode_literals
 import re
 import pint
 from errbot import BotPlugin, botcmd, re_botcmd

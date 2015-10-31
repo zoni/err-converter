@@ -1,4 +1,5 @@
 # encoding: utf-8
+from __future__ import unicode_literals
 from os.path import abspath, dirname
 from errbot.backends.test import testbot, FullStackTest
 from convert import Converter
@@ -25,20 +26,20 @@ class TestTemperatureConversions(object):
 
     def test_temperature_regex(self, testbot):
         say_expect = [
-            ("It's 30 degrees C", u"30 °C = 86 °F"),
-            ("It's 30 degrees Celsius", u"30 °C = 86 °F"),
-            ("It's 30 degrees C today", u"30 °C = 86 °F"),
-            ("It's 30 degrees c today", u"30 °C = 86 °F"),
-            ("It's 30 degrees Celsius today", u"30 °C = 86 °F"),
-            ("It's 30 degrees celsius today", u"30 °C = 86 °F"),
-            ("It's 30 degrees c.", u"30 °C = 86 °F"),
-            ("It's 30 degrees celsius.", u"30 °C = 86 °F"),
-            ("It's 30 celsius today", u"30 °C = 86 °F"),
-            ("It's 86 degrees Fahrenheit today", u"86 °F = 30 °C"),
-            ("It's -40 degrees Celsius today", u"-40 °C = -40 °F"),
-            ("30 degrees Celsius", u"30 °C = 86 °F"),
-            ("What's 37 degrees celsius in fahrenheit?", u"37 °C = 98.6 °F"),
-            ("What's 98.6 degrees fahrenheit in celsius?", u"98.6 °F = 37 °C"),
+            ("It's 30 degrees C", "30 °C = 86 °F"),
+            ("It's 30 degrees Celsius", "30 °C = 86 °F"),
+            ("It's 30 degrees C today", "30 °C = 86 °F"),
+            ("It's 30 degrees c today", "30 °C = 86 °F"),
+            ("It's 30 degrees Celsius today", "30 °C = 86 °F"),
+            ("It's 30 degrees celsius today", "30 °C = 86 °F"),
+            ("It's 30 degrees c.", "30 °C = 86 °F"),
+            ("It's 30 degrees celsius.", "30 °C = 86 °F"),
+            ("It's 30 celsius today", "30 °C = 86 °F"),
+            ("It's 86 degrees Fahrenheit today", "86 °F = 30 °C"),
+            ("It's -40 degrees Celsius today", "-40 °C = -40 °F"),
+            ("30 degrees Celsius", "30 °C = 86 °F"),
+            ("What's 37 degrees celsius in fahrenheit?", "37 °C = 98.6 °F"),
+            ("What's 98.6 degrees fahrenheit in celsius?", "98.6 °F = 37 °C"),
         ]
 
         for item in say_expect:
