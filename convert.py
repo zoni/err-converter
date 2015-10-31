@@ -13,6 +13,12 @@ TEMPERATURE_REGEX = re.compile(
         ([^\w]+|$)  # after c/f should come non-word character or end of line.""",
     flags=re.IGNORECASE|re.VERBOSE
 )
+UNIT_REPLACEMENTS = {re.escape(k): v for k, v in {
+    "degC": "°C",
+    "degF": "°F",
+    "degK": "°K",
+}.items()}
+UNIT_REPLACEMENT_REGEX = re.compile("|".join(UNIT_REPLACEMENTS.keys()))
 
 
 class Converter(BotPlugin):
@@ -41,6 +47,21 @@ class Converter(BotPlugin):
         to = from_.to(getattr(self.unitregistry, to))
         return (from_, to)
 
+    def format_quantity(self, quantity):
+        """
+        Format a Quantity for pretty-printing.
+
+        :param quantity:
+            A pint Quantity object
+        :return:
+            A pretty-printed string
+        """
+        text = UNIT_REPLACEMENT_REGEX.sub(
+            lambda m: UNIT_REPLACEMENTS[re.escape(m.group(0))],
+            "{:1g}".format(quantity)
+        )
+        return text
+
     @botcmd(name="convert", split_args_with=None)
     def convert_cmd(self, msg, args):
         """
@@ -67,7 +88,10 @@ class Converter(BotPlugin):
 
         try:
             from_, to = self.convert(amount, from_, to)
-            return "{:1g} = {:1g}".format(from_, to)
+            return "{} = {}".format(
+                self.format_quantity(from_),
+                self.format_quantity(to)
+            )
         except Exception as e:
             return "I don't know how to convert that ({}).".format(e)
 

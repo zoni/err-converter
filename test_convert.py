@@ -25,20 +25,20 @@ class TestTemperatureConversions(object):
 
     def test_temperature_regex(self, testbot):
         say_expect = [
-            ("It's 30 degrees C", u"30 degC = 86 degF"),
-            ("It's 30 degrees Celsius", u"30 degC = 86 degF"),
-            ("It's 30 degrees C today", u"30 degC = 86 degF"),
-            ("It's 30 degrees c today", u"30 degC = 86 degF"),
-            ("It's 30 degrees Celsius today", u"30 degC = 86 degF"),
-            ("It's 30 degrees celsius today", u"30 degC = 86 degF"),
-            ("It's 30 degrees c.", u"30 degC = 86 degF"),
-            ("It's 30 degrees celsius.", u"30 degC = 86 degF"),
-            ("It's 30 celsius today", u"30 degC = 86 degF"),
-            ("It's 86 degrees Fahrenheit today", u"86 degF = 30 degC"),
-            ("It's -40 degrees Celsius today", u"-40 degC = -40 degF"),
-            ("30 degrees Celsius", u"30 degC = 86 degF"),
-            ("What's 37 degrees celsius in fahrenheit?", u"37 degC = 98.6 degF"),
-            ("What's 98.6 degrees fahrenheit in celsius?", u"98.6 degF = 37 degC"),
+            ("It's 30 degrees C", u"30 °C = 86 °F"),
+            ("It's 30 degrees Celsius", u"30 °C = 86 °F"),
+            ("It's 30 degrees C today", u"30 °C = 86 °F"),
+            ("It's 30 degrees c today", u"30 °C = 86 °F"),
+            ("It's 30 degrees Celsius today", u"30 °C = 86 °F"),
+            ("It's 30 degrees celsius today", u"30 °C = 86 °F"),
+            ("It's 30 degrees c.", u"30 °C = 86 °F"),
+            ("It's 30 degrees celsius.", u"30 °C = 86 °F"),
+            ("It's 30 celsius today", u"30 °C = 86 °F"),
+            ("It's 86 degrees Fahrenheit today", u"86 °F = 30 °C"),
+            ("It's -40 degrees Celsius today", u"-40 °C = -40 °F"),
+            ("30 degrees Celsius", u"30 °C = 86 °F"),
+            ("What's 37 degrees celsius in fahrenheit?", u"37 °C = 98.6 °F"),
+            ("What's 98.6 degrees fahrenheit in celsius?", u"98.6 °F = 37 °C"),
         ]
 
         for item in say_expect:
