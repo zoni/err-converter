@@ -15,12 +15,13 @@ class TestTemperatureConversions(object):
 
         testbot.bot.push_message("!convert a kilometer to yards")
         m = testbot.bot.pop_message()
-        assert (
-            m == "I don't know how to convert that (could not convert string to float: 'a')."
-            or m == "I don't know how to convert that (could not convert string to float: a)."
+        assert m in (
+            "I don't know how to convert that (could not convert string to float: 'a').",
+            "I don't know how to convert that (could not convert string to float: a)."
         )
         testbot.bot.push_message("!convert 1 foo to bar")
-        assert testbot.bot.pop_message() == "I don't know how to convert that ('foo' is not defined in the unit registry)."
+        assert testbot.bot.pop_message() == \
+            "I don't know how to convert that ('foo' is not defined in the unit registry)."
 
     def test_temperature_regex(self, testbot):
         say_expect = [
