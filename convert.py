@@ -26,9 +26,9 @@ class Converter(BotPlugin):
     """Convert various measurements and metrics"""
     min_err_version = '3.1.0'
 
-    def __init__(self):
-        super(Converter, self).__init__()
+    def activate(self):
         self.unitregistry = pint.UnitRegistry(autoconvert_offset_to_baseunit=True)
+        super(Converter, self).activate()
 
     def convert(self, quantity, from_, to):
         """
